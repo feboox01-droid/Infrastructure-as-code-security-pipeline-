@@ -1,0 +1,26 @@
+name: IaC Security Scan
+
+# 1. Trigger: Kab ye pipeline chalni chahiye?
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  checkov-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: GitHub se code ko machine par laana
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Checkov Security Scanner ko run karna
+      - name: Run Checkov scan
+        uses: bridgecrewio/checkov-action@master
+        with:
+          # Iska matlab hai agar galti mile toh pipeline fail kar do
+          soft_fail: false 
+          framework: terraform
+          output_format: cli
